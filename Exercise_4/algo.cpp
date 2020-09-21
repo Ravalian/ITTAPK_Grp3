@@ -15,7 +15,7 @@
 
 
 #define PRODUCT_DB_FILE		"product.db"
-
+std::vector<char>   buffer_;
 class Product
 {
 public:
@@ -53,6 +53,7 @@ private:
   std::string   name_;
   float         price_;
   int           sold_;
+  
 };
 typedef std::vector<Product>  ProductList;
 
@@ -74,30 +75,53 @@ std::istream& operator>> ( std::istream& i, Product& p )
  */
 void productDBRead(ProductList& pl, const std::string& fileName)
 {
-  pl.clear();
-  std::ifstream pFile( fileName.c_str() );
-  while( !pFile.eof() )
-  {
-    Product p;
-    pFile >> p;
-    if( pFile ) pl.push_back( p );
-  }
+  //pl.clear();
+  //std::ifstream pFile( fileName.c_str() );
+  //while( !pFile.eof() )
+  //{
+  //  Product p;
+  //  pFile >> p;
+  //  if( pFile ) pl.push_back( p );
+  //}
+  
+  //std::vector<char> buffer;
+  std::ifstream s (fileName.c_str());
+  s.unsetf(std::ios::skipws);
+  
+  std::istream_iterator<char> it1( s ); /* Start of file */
+  std::istream_iterator<char> it2; /* End Of File */
+
+  std::copy( it1, it2, std::back_inserter(buffer_));
+  //for (std::vector<char>::const_iterator i = buffer_.begin(); i != buffer_.end(); ++i)
+  //  std::cout << *i << "";
+
 }
-
-
 /**
  * Printout all products
  */
 void printAll(const ProductList& pl)
 {
+  
   std::cout << "##################################################" << std::endl;
   std::cout << "Printing out all products..." << std::endl;
   std::cout << "----------------------------" << std::endl;
+  /*
   for(ProductList::const_iterator iter = pl.begin(); iter != pl.end(); ++iter)
   {
     std::cout << *iter << std::endl;
-  }  
+  }
+  */
+
+  //for (std::vector<char>::const_iterator i = buffer_.begin(); i != buffer_.end(); ++i)
+    //std::cout << *i << "";
+
+  std::ostream_iterator<char> it1(std::cout,"");
+  std::copy(buffer_.begin(), buffer_.end(), it1);
+  std::cout << std::endl;
+
   std::cout << "##################################################" << std::endl;
+  
+
 }
 
 
@@ -107,6 +131,7 @@ void printAll(const ProductList& pl)
 */
 void addItem(ProductList& pl)
 {
+  
 }
 
 
